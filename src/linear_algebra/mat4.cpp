@@ -110,7 +110,7 @@ mat4 mat4::rotate(float angle, float x, float y, float z) {
     mat4 ry = mat4(v0y, v1y, v2y, v3y);
     mat4 rz = mat4(v0z, v1z, v2z, v3z);
 
-   // return (rx*ry*rz);
+   //return (rx*ry*rz);
     if(mat4isEqual(x, 1) && mat4isEqual(y, 0) && mat4isEqual(z, 0)) {
         return rx;
     } else if(mat4isEqual(x, 0) && mat4isEqual(y, 1) && mat4isEqual(z, 0)) {
@@ -123,7 +123,7 @@ mat4 mat4::rotate(float angle, float x, float y, float z) {
 /// Takes an xyz displacement and outputs a 4x4 translation matrix
 mat4 mat4::translate(float x, float y, float z){
     vec4 v0 = vec4(1, 0, 0, x);
-    vec4 v1 = vec4(0, 1, 1, y);
+    vec4 v1 = vec4(0, 1, 0, y);
     vec4 v2 = vec4(0, 0, 1, z);
     vec4 v3 = vec4(0, 0, 0, 1);
     return mat4(v0, v1, v2, v3);
@@ -230,13 +230,25 @@ mat4 mat4::operator*(const mat4 &m2) const{
     vec4 v2 = vec4(dot((*this)[2], c0), dot((*this)[2], c1), dot((*this)[2], c2), dot((*this)[2], c3));
     vec4 v3 = vec4(dot((*this)[3], c0), dot((*this)[3], c1), dot((*this)[3], c2), dot((*this)[3], c3));
 
-    return mat4(v0, v1, v2, v3);
+//    return mat4(v0, v1, v2, v3);
+
+    mat4 m;
+    for(int row = 0; row < 4; row++){
+        for(int col =  0; col< 4; col++){
+            m[row][col] = dot(data[row], m2[col]);
+        }
+    }
+    return m;
 }
 
 /// Matrix/vector multiplication (m * v)
 /// Assume v is a column vector (ie. a 4x1 matrix)
 vec4 mat4::operator*(const vec4 &v) const{
-    return vec4(dot((*this)[0], v), dot((*this)[1], v), dot((*this)[2], v), dot((*this)[3], v));
+    vec4 v2;
+    for(int i = 0; i < 4; i++) {
+        v2[i] = dot(data[i], v);
+    }
+    return v2;
 }
 
 

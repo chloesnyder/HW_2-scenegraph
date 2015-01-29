@@ -23,6 +23,8 @@ void ShaderProgram::setModelMatrix(const mat4 &model) {
   }
 
   if (unifModelInvTr != -1) {
+      std::cout << "Matrix: " << std::endl << transpose(model) << std::endl;
+      std::cout << "Inverse: " << std::endl <<la::inverse(transpose(model)) << std::endl;
     mat4 modelinvtr = la::inverse(transpose(model));
     prog.setUniformValue(unifModelInvTr, la::to_qmat(modelinvtr));
   }

@@ -96,7 +96,10 @@ void MyGL::paintGL() {
   //This is because OpenGL expects column-major matrices, but you've
   //implemented row-major matrices.
   mat4 model = transpose(mat4::translate(-2,0,0) * mat4::scale(3,3,3));
-
+  model = mat4::rotate(45, 0,0,1);
+  std::cout << model << std::endl;
+  model = transpose(mat4::rotate(45, 0,0,1));
+  std::cout << model << std::endl;
   //Send the geometry's transformation matrix to the shader
   prog_lambert.setModelMatrix(model);
 
@@ -109,7 +112,8 @@ void MyGL::paintGL() {
   //Now do the same to render the cylinder
   //We've rotated it -45 degrees on the Z axis, then translated it to the point <2,2,0>
   model = transpose(mat4::translate(2,2,0) * mat4::rotate(-45,0,0,1));
-  prog_lambert.setModelMatrix(model);
+ //  model = transpose(mat4::rotate(-45,0,0,1));
+  //prog_lambert.setModelMatrix(model);
   geom_cylinder.setColor(vec4(1,0,0,1));//Set its color to red
   prog_lambert.draw(*this, geom_cylinder);
 
