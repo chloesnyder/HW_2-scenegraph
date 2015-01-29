@@ -90,16 +90,13 @@ void MyGL::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //VVV CLEAR THIS CODE WHEN YOU IMPLEMENT SCENE GRAPH TRAVERSAL VVV
-
+#if 1
   //Create a model matrix. This one scales the sphere uniformly by 3, then translates it by <-2,0,0>.
   //Note that we have to transpose the model matrix before passing it to the shader
   //This is because OpenGL expects column-major matrices, but you've
   //implemented row-major matrices.
   mat4 model = transpose(mat4::translate(-2,0,0) * mat4::scale(3,3,3));
-  model = mat4::rotate(45, 0,0,1);
-  std::cout << model << std::endl;
-  model = transpose(mat4::rotate(45, 0,0,1));
-  std::cout << model << std::endl;
+
   //Send the geometry's transformation matrix to the shader
   prog_lambert.setModelMatrix(model);
 
@@ -112,13 +109,12 @@ void MyGL::paintGL() {
   //Now do the same to render the cylinder
   //We've rotated it -45 degrees on the Z axis, then translated it to the point <2,2,0>
   model = transpose(mat4::translate(2,2,0) * mat4::rotate(-45,0,0,1));
- //  model = transpose(mat4::rotate(-45,0,0,1));
-  //prog_lambert.setModelMatrix(model);
+  prog_lambert.setModelMatrix(model);
   geom_cylinder.setColor(vec4(1,0,0,1));//Set its color to red
   prog_lambert.draw(*this, geom_cylinder);
 
   //^^^ CLEAR THIS CODE WHEN YOU IMPLEMENT SCENE GRAPH TRAVERSAL ^^^
-
+#endif
   //Here is a good spot to call your scene graph traversal function.
 }
 
