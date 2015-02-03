@@ -10,7 +10,7 @@
 namespace la {
     QMatrix4x4 to_qmat(const mat4 &m);
     QVector4D to_qvec(const vec4 &v);
-    mat4 inverse(const mat4& m);
+    mat4 inverse(mat4 m);
     float determinant4x4(const mat4& m);
     float determinant3x3(const float(&m)[3][3]);
     float determinant2x2(const float(&m)[2][2]);

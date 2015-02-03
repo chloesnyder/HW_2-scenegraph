@@ -200,8 +200,6 @@ node::node(const node &n2) {
 
 ///destructor
 node::~node(){
-    //TODO: how to delete geometry?
-    delete geometry;
     children.erase(children.begin(), children.end());
 }
 

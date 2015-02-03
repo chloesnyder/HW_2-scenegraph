@@ -123,8 +123,11 @@ void MyGL::paintGL() {
   //^^^ CLEAR THIS CODE WHEN YOU IMPLEMENT SCENE GRAPH TRAVERSAL ^^^
 #endif
 mat4 ident = mat4::identity();
-node* cube = new node(&geom_cube, 0, 0, 0, 0, 0, 0, 1,1,1);
+node* cube = new node(&geom_cube, 0, 3, 0, 0, 0, 0, 1,1,1);
+node* cube2 = new node(&geom_cube, 0, 0, 0, 0, 0, 0, 1,1,1);
 traverse(cube, ident);
+traverse(cube2, ident);
+
 
   //Here is a good spot to call your scene graph traversal function.
 //node* b = new node(&geom_sphere, 0.f, 0.f, 4.f, 0.f, 0.f, 0.f, 1.f, 1.f, 1.f);
