@@ -16,6 +16,7 @@ MyGL::~MyGL() {
   vao.destroy();
   geom_cylinder.destroy();
   geom_sphere.destroy();
+  geom_cube.destroy();
 }
 
 void MyGL::initializeGL() {
@@ -44,11 +45,14 @@ void MyGL::initializeGL() {
   vao.create();
 
   //Create the example sphere (you should delete this when you add your own code elsewhere)
-  geom_cylinder.setColor(vec4(1,0,0,1));
-  geom_cylinder.create();
+  geom_sphere.setColor(vec4(1,0,0,1));
+  geom_sphere.create();
 
   geom_sphere.setColor(vec4(0,1,0,1));
   geom_sphere.create();
+
+  geom_cube.setColor(vec4(0,0,1,1));
+  geom_cube.create();
 
   // Create and set up the diffuse shader
   prog_lambert.create(":/glsl/lambert.vert.glsl", ":/glsl/lambert.frag.glsl");
@@ -83,6 +87,7 @@ void MyGL::resizeGL(int w, int h) {
   printGLErrorLog();
 }
 
+
 // This function is called by Qt any time your GL window is supposed to update
 // For example, when the function updateGL is called, paintGL is called implicitly.
 void MyGL::paintGL() {
@@ -90,7 +95,7 @@ void MyGL::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //VVV CLEAR THIS CODE WHEN YOU IMPLEMENT SCENE GRAPH TRAVERSAL VVV
-#if 1
+#if 0
   //Create a model matrix. This one scales the sphere uniformly by 3, then translates it by <-2,0,0>.
   //Note that we have to transpose the model matrix before passing it to the shader
   //This is because OpenGL expects column-major matrices, but you've
@@ -104,8 +109,10 @@ void MyGL::paintGL() {
   geom_sphere.setColor(vec4(0,1,0,1));
 
   //Draw the example sphere using our lambert shader
-  prog_lambert.draw(*this, geom_sphere);
+ // prog_lambert.draw(*this, geom_sphere);
 
+  //Draw the example cube using our lambert shader
+  prog_lambert.draw(*this, geom_cube);
   //Now do the same to render the cylinder
   //We've rotated it -45 degrees on the Z axis, then translated it to the point <2,2,0>
   model = transpose(mat4::translate(2,2,0) * mat4::rotate(-45,0,0,1));
@@ -115,7 +122,55 @@ void MyGL::paintGL() {
 
   //^^^ CLEAR THIS CODE WHEN YOU IMPLEMENT SCENE GRAPH TRAVERSAL ^^^
 #endif
+mat4 ident = mat4::identity();
+node* cube = new node(&geom_cube, 0, 0, 0, 0, 0, 0, 1,1,1);
+traverse(cube, ident);
+
   //Here is a good spot to call your scene graph traversal function.
+//node* b = new node(&geom_sphere, 0.f, 0.f, 4.f, 0.f, 0.f, 0.f, 1.f, 1.f, 1.f);
+//node* c = new node(&geom_sphere, -2.f, 0.f, -1.f, 0.f, 90.f, 0.f, 1.f, 1.f, 1.f);
+//node* d = new node(&geom_cylinder, 0.f, -1.f, -1.f, -90.f, 0.f, 180.f, 1.f, 1.f, 1.f);
+//node* a = new node(b, &geom_cylinder, 1.f, 4.f, 0.f, 90.f, 0.f, 0.f, 2.f, 2.f, 2.f);
+//b->setChild(c);
+//b->setParent(d);
+//mat4 ident = mat4::identity();
+//traverse(d, ident);
+//node* h = new node(&geom_sphere);
+//traverse(h, ident);
+
+  ///-------------------------
+  /// SCENE GRAPH CODE
+  /// -------------------------
+    //mat4 ident = mat4::identity();
+  //everything originates from here, so this will be the overall root node
+//  node* torso = new node(&geom_cylinder, 1.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 3.f, 1.f);
+//  node* unscale_head = new node(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, -3.f, -1.f);
+//  //child of torso, only torso
+  //node* head = new node(torso, &geom_sphere, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2.f, 2.f, 2.f);
+ // head->setParent(unscale_head);
+  //torso->setChild(unscale_head);
+ // traverse(torso, ident);
+//  //upper right arm, parent of lower arm
+//  node* UR_Arm = new node(&geom_cylinder, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 2.f, 2.f, 2.f);
+//  node* LR_Arm;
+//  //upper left arm, parent of lower arm
+//  node* LR_Arm;
+//  node* LL_Arm;
+}
+
+///My traverse function. Traverses from root to all children, applying transformation matrices
+void MyGL::traverse(node* &n, mat4 &transf) {
+      mat4 t = transf * n->getTransform();
+      vector<node*> children = n->getChildren();
+      if(!children.empty()) {
+          for(node* child : children) {
+              traverse(child, t);
+          }
+      }
+      if(n->getGeometry() != NULL) {
+          prog_lambert.setModelMatrix(transpose(t));
+          prog_lambert.draw(*this, *(n->getGeometry()));
+      }
 }
 
 void MyGL::keyPressEvent(QKeyEvent *e) {

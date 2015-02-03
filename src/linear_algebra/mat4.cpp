@@ -79,12 +79,7 @@ vec4 &mat4::operator[](unsigned int index){
 /// Takes an angle in degrees and an axis represented by its xyz components, and outputs a 4x4 rotation matrix
 /// You may choose to only handle the three cardinal axes of rotation.
 mat4 mat4::rotate(float angle, float x, float y, float z) {
-    //For now, only handle cardinal rotation matrixes
-    assert((mat4isEqual(x, 1) && mat4isEqual(y, 0) && mat4isEqual(z, 0)) ||
-           (mat4isEqual(x, 0) && mat4isEqual(y, 1) && mat4isEqual(z, 0)) ||
-           (mat4isEqual(x, 0) && mat4isEqual(y, 0) && mat4isEqual(z, 1)));
-
-    //normalize the input vector, will be useful for future assignments
+    //normalize the input vector
     vec4 norm = normalize(vec4(x, y, z, 0));
     x = norm[0];
     y = norm[1];
@@ -92,33 +87,13 @@ mat4 mat4::rotate(float angle, float x, float y, float z) {
     //convert angle from degrees to radians
     angle = convertDegToRad(angle);
 
-    vec4 v0x = vec4(1, 0, 0, 0);
-    vec4 v1x = vec4(0, x*cos(angle), -x*sin(angle), 0);
-    vec4 v2x = vec4(0, x*sin(angle), x*cos(angle), 0);
-    vec4 v3x = vec4(0, 0, 0, 1);
+    //Rodrigues Formula
+    vec4 v0 = vec4(cos(angle) + x*x*(1-cos(angle)), x*y*(1-cos(angle)) - z*sin(angle), y*sin(angle) + x*z*(1-cos(angle)),0);
+    vec4 v1 = vec4(z*sin(angle) + x*y*(1-cos(angle)), cos(angle) + y*y*(1-cos(angle)), -x*sin(angle) + y*z*(1-cos(angle)), 0);
+    vec4 v2 = vec4(-y*sin(angle) + x*z*(1-cos(angle)), x*sin(angle) + y*z*(1-cos(angle)), cos(angle) + z*z*(1-cos(angle)), 0);
+    vec4 v3 = vec4(0, 0, 0, 1);
 
-    vec4 v0y = vec4(y*cos(angle), 0, y*sin(angle), 0);
-    vec4 v1y = vec4(0, 1, 0, 0);
-    vec4 v2y = vec4(-y*sin(angle), 0, y*cos(angle), 0);
-    vec4 v3y = vec4(0, 0, 0, 1);
-
-    vec4 v0z = vec4(z*cos(angle), -z*sin(angle), 0, 0);
-    vec4 v1z = vec4(z*sin(angle), z*cos(angle), 0, 0);
-    vec4 v2z = vec4(0, 0, 1, 0);
-    vec4 v3z = vec4(0, 0, 0, 1);
-
-    mat4 rx = mat4(v0x, v1x, v2x, v3x);
-    mat4 ry = mat4(v0y, v1y, v2y, v3y);
-    mat4 rz = mat4(v0z, v1z, v2z, v3z);
-
-   //return (rx*ry*rz);
-    if(mat4isEqual(x, 1) && mat4isEqual(y, 0) && mat4isEqual(z, 0)) {
-        return rx;
-    } else if(mat4isEqual(x, 0) && mat4isEqual(y, 1) && mat4isEqual(z, 0)) {
-        return ry;
-    } else if(mat4isEqual(x, 0) && mat4isEqual(y, 0) && mat4isEqual(z, 1)) {
-        return rz;
-    }
+    return mat4(v0, v1, v2, v3);
 }
 
 /// Takes an xyz displacement and outputs a 4x4 translation matrix

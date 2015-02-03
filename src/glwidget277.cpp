@@ -99,8 +99,8 @@ void GLWidget277::printGLErrorLog() {
     std::cerr << e << std::endl;
     // Throwing here allows us to use the debugger to track down the error.
 #ifndef __APPLE__
-    // Don't do this on OS X.
-    // http://lists.apple.com/archives/mac-opengl/2012/Jul/msg00038.html
+//    // Don't do this on OS X.
+//    // http://lists.apple.com/archives/mac-opengl/2012/Jul/msg00038.html
     throw;
 #endif
   }
