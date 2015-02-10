@@ -9,11 +9,20 @@
 
 uniform vec4 u_Color;//The color with which to render this instance of geometry.
 
+///added code
+uniform float u_Time; //add for fun moving
+
+//uniform vec2 uResolution //add for noise
+
 //These are the interpolated values out of the rasterizer, so you can't know
 //their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
+
+//added code
+in vec4 fs_Pos;
+
 
 out vec4 out_Col;//This is the final output color that you will see on your screen for the pixel that is currently being processed.
 
@@ -33,6 +42,15 @@ void main()
                                                         //to simulate ambient lighting. This ensures that faces that are not
                                                         //lit by our point light are not completely black.
 
+
+    ///added code
+    vec4 sin_offset = sin(fs_Pos.y + u_Time * 360 * (3.14f/180.0f)) * vec4(1, 0, 0, 1);
+    vec4 cos_offset = cos(fs_Pos.x + u_Time * 360 * (3.14f/180.0f)) * vec4(0, 0, 1, 1);
+
     // Compute final shaded color
-    out_Col = normalize(abs(fs_Nor));//vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+    //out_Col = normalize(abs(fs_Nor)); //Visual debugging
+    //out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a) + sin_offset + cos_offset; //FUN COLOR TIME!!!
+     out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+
+
 }

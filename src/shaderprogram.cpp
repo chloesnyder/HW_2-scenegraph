@@ -13,6 +13,7 @@ void ShaderProgram::create(const char *vertfile, const char *fragfile) {
   unifModelInvTr = prog.uniformLocation("u_ModelInvTr");
   unifViewProj   = prog.uniformLocation("u_ViewProj");
   unifColor      = prog.uniformLocation("u_Color");
+  unifTime       = prog.uniformLocation("u_Time");
 }
 
 void ShaderProgram::setModelMatrix(const mat4 &model) {

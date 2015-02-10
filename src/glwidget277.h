@@ -19,6 +19,7 @@ class GLWidget277
   /*** AUTOMATIC TESTING: DO NOT MODIFY ***/
   /*** If true, save a test image and exit */
   /***/ bool autotesting;
+  float time;
 
  public:
   GLWidget277(QWidget *parent);

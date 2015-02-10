@@ -21,7 +21,7 @@ class node {
     node* parent;
     vector<node*> children;
     ShaderProgram::Drawable* geometry;
-    mat4 trans;
+    mat4 trans; //translation matrix
 
  public:
 
@@ -84,23 +84,18 @@ class node {
     void setChildren(vector<node*> children);
     void setParent(node* &n);
     void setGeometry(ShaderProgram::Drawable* &g);
-    void setRX(float &rx);
-    void setRY(float &ry);
-    void setRZ(float &rz);
-    void setTX(float &tx);
-    void setTY(float &ty);
-    void setTZ(float &tz);
-    void setSX(float &sx);
-    void setSY(float &sy);
-    void setSZ(float &sz);
+    void setRX(float rx);
+    void setRY(float ry);
+    void setRZ(float rz);
+    void setTX(float tx);
+    void setTY(float ty);
+    void setTZ(float tz);
+    void setSX(float sx);
+    void setSY(float sy);
+    void setSZ(float sz);
+    void rotateAroundNewPoint(float px, float py, float pz);
     mat4 getTransform();
 
-    ///----------------------------------------------------------------------
-    /// Functions
-    ///----------------------------------------------------------------------
-
-
-    //static void traverse(node* &n, mat4 &transf);
 };
 #endif // NODE
 

@@ -170,5 +170,10 @@ void GLWidget277::timerUpdate() {
   // (Don't update your scene in paintGL, because it
   // sometimes gets called automatically by Qt.)
 
+    time += 0.0167f;//1/60th second
+    if(time > 2){
+        time = time - 2;
+    }
+
   update();
 }

@@ -43,6 +43,7 @@ public:
     int unifModelInvTr;
     int unifViewProj;
     int unifColor;
+    int unifTime;
 
 public:
     void create(const char *vertfile, const char *fragfile);

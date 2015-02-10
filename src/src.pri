@@ -14,7 +14,9 @@ SOURCES += \
     $$PWD/linear_algebra/vec4.cpp \
     $$PWD/la.cpp \
     $$PWD/node.cpp \
-    $$PWD/scene/cube.cpp
+    $$PWD/scene/cube.cpp \
+    $$PWD/scene/cone.cpp \
+    $$PWD/scene/pipe.cpp
 
 HEADERS += \
     $$PWD/la.h \
@@ -28,4 +30,6 @@ HEADERS += \
     $$PWD/linear_algebra/mat4.h \
     $$PWD/linear_algebra/vec4.h \
     $$PWD/node.h \
-    $$PWD/scene/cube.h
+    $$PWD/scene/cube.h \
+    $$PWD/scene/cone.h \
+    $$PWD/scene/pipe.h
